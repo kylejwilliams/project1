@@ -41,23 +41,72 @@
 
 import java.util.*;
 
+/**
+ * @author kyle
+ *
+ */
+/**
+ * @author kyle
+ *
+ */
 public class project1 {
 	
 	/**
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
 	
+	
+	/**
+	 * @param initial
+	 * @param solution
+	 * @param limit
+	 * @return
+	 */
 	private static Vector<Integer> DepthLimitedSearch(Vector<Integer> initial, Vector<Integer> solution, int limit) {
 		return RecursiveDLS(initial, initial, solution, limit);
 		
 	}
 	
+	/**
+	 * @param node
+	 * @param initial
+	 * @param solution
+	 * @param limit
+	 * @return
+	 */
 	private static Vector<Integer> RecursiveDLS(Vector<Integer> node, Vector<Integer> initial, Vector<Integer> solution, int limit) {
 		return node;
 	}
 
 }
+
+
+/**
+ * @author kyle
+ *
+ */
+class Problem {
+	public Vector<Integer> initialState = new Vector<Integer>();
+	public Vector<Integer> solution = new Vector<Integer>();
+	public Vector<Vector<Integer>> actionList = new Vector<Vector<Integer>>();
+	
+	Problem() {
+		initialState.add(3);
+		initialState.add(3);
+		initialState.add(1);
+		
+		solution.add(0);
+		solution.add(0);
+		solution.add(0);
+	}
+	
+	public boolean goalTest(Vector<Integer> possibleSolution) {
+		if (solution.equals(possibleSolution)) return true;
+		else return false;
+	}
+}
+
