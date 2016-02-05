@@ -94,7 +94,17 @@ public class project1 {
 	 * 					a failure message, to be debugged.
 	 */
 	private static Node RecursiveDLS(Node node, Problem problem, int limit) {
-		return node;
+		if (problem.goalTest(node)) return node;
+		else if (limit == 0) {
+			ArrayList<Integer> error = new ArrayList<Integer>();
+			for (int i = 0; i < 3; i++)
+				error.add(-1);
+			Node errorNode = new Node(error);
+			return errorNode;
+		}
+		else {
+			return node;
+		}
 	}
 	
 	/**
@@ -114,7 +124,10 @@ public class project1 {
 class Problem {
 	public ArrayList<Integer> initialState = new ArrayList<Integer>();
 	public ArrayList<Integer> solution = new ArrayList<Integer>();
-	public ArrayList<ArrayList<Integer>> actionList = new ArrayList<ArrayList<Integer>>();
+	public ArrayList<ArrayList<Integer>> actionList = 
+			new ArrayList<ArrayList<Integer>>();
+	public ArrayList<Integer> cutoffError = new ArrayList<Integer>();
+	public ArrayList<Integer> failureError = new ArrayList<Integer>();
 	
 
 	public Problem() {
@@ -141,6 +154,12 @@ class Problem {
 			actionList.add(new ArrayList<Integer>(currentAction));
 			currentAction.clear();
 		}
+		
+		for (int i = 0; i < 3; i++)
+			cutoffError.add(-1);
+		
+		for (int i = 0; i < 3; i++)
+			failureError.add(-2);
 	}
 	
 	/**
