@@ -184,13 +184,37 @@ class Problem {
 			failureError.add(-2);
 	}
 	
+	/**
+	 * @param node		A node being evaluated for possible actions to take
+	 * @return			a list of valid actions that can be performed on the 
+	 * 					node
+	 */
 	public ArrayList<ArrayList<Integer>> validActions(Node node) {
 		ArrayList<ArrayList<Integer>> actions = 
 				new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> tempAction = new ArrayList<Integer>();
 		
-		// for (int i = 0; i < actionList.size(); i++) {
-			// TODO generate an array list of actions that the node can take
-		// }
+		for (ArrayList<Integer> action : actionList) {
+			if (action.get(2) == 1) { // boat is on the wrong side
+				for (int i = 0; i < action.size(); i++)
+					tempAction.add(node.state.get(i) - action.get(i));
+			} 
+			else if (action.get(2) == 0) { // boat is on the right side
+				for (int i = 0; i < action.size(); i++)
+					tempAction.add(node.state.get(i) + action.get(i));
+			}
+			
+			if (tempAction.get(0) < tempAction.get(1)) // more cannibals than missionaries
+				tempAction.clear();
+			else if (tempAction.get(0) < 0 || tempAction.get(0) > 3) // missionaries out of bounds
+				tempAction.clear();
+			else if (tempAction.get(1) < 0 || tempAction.get(1) > 3) // cannibals out of bounds
+				tempAction.clear();
+			else if (tempAction.get(2) < 0 || tempAction.get(2) > 1) // boat out of bounds
+				tempAction.clear();
+			else
+				actions.add(tempAction);
+		}
 		
 		return actions;
 	}
