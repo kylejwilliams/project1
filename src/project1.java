@@ -51,8 +51,16 @@ public class project1 {
 		Problem problem = new Problem();
 		int limit = 11;
 		
+		System.out.print("initial state: ");
+		System.out.println(problem.initialState);
+		System.out.print("solution: ");
+		System.out.println(problem.solution);
+		
 		Node result = 
 				DepthLimitedSearch(problem, limit);
+		
+		System.out.print("result: ");
+		System.out.println(result.state);
 		
 		if (result.state.equals(problem.solution)) {
 			System.out.println("solution found!");
@@ -100,6 +108,7 @@ public class project1 {
 			boolean cutoffOccured = false;
 			
 			for (ArrayList<Integer> action : problem.validActions(node)) {
+				System.out.println(action);
 				Node child = makeChildNode(problem, node, action);
 				Node result = RecursiveDLS(child, problem, limit - 1);
 				
@@ -131,11 +140,17 @@ public class project1 {
 	 */
 	public static Node makeChildNode(Problem problem, Node node, 
 			ArrayList<Integer> action) {
-		/* TODO implement code to create a child node - a node that is derived
-		 * from a parent node, and an action. Must make sure the child node is
-		 * valid.
-		 */
-		return node;
+		
+		ArrayList<Integer> tempState = new ArrayList<Integer>();
+		
+		for (int i = 0; i < node.state.size(); i++) {
+			tempState.add(node.state.get(i) + action.get(i));
+		}
+		
+		Node tempNode = new Node(tempState);
+		node.childNode = tempNode;
+
+		return tempNode;
 	}
 }
 
@@ -192,28 +207,33 @@ class Problem {
 	public ArrayList<ArrayList<Integer>> validActions(Node node) {
 		ArrayList<ArrayList<Integer>> actions = 
 				new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> tempAction = new ArrayList<Integer>();
+		ArrayList<Integer> tempState = new ArrayList<Integer>();
 		
 		for (ArrayList<Integer> action : actionList) {
 			if (action.get(2) == 1) { // boat is on the wrong side
 				for (int i = 0; i < action.size(); i++)
-					tempAction.add(node.state.get(i) - action.get(i));
+					tempState.add(node.state.get(i) - action.get(i));
 			} 
 			else if (action.get(2) == 0) { // boat is on the right side
 				for (int i = 0; i < action.size(); i++)
-					tempAction.add(node.state.get(i) + action.get(i));
+					tempState.add(node.state.get(i) + action.get(i));
 			}
 			
-			if (tempAction.get(0) < tempAction.get(1)) // more cannibals than missionaries
-				tempAction.clear();
-			else if (tempAction.get(0) < 0 || tempAction.get(0) > 3) // missionaries out of bounds
-				tempAction.clear();
-			else if (tempAction.get(1) < 0 || tempAction.get(1) > 3) // cannibals out of bounds
-				tempAction.clear();
-			else if (tempAction.get(2) < 0 || tempAction.get(2) > 1) // boat out of bounds
-				tempAction.clear();
-			else
-				actions.add(tempAction);
+			if (tempState.get(0) < tempState.get(1)) // more cannibals than missionaries
+				tempState.clear();
+			else if (tempState.get(0) < 0 || tempState.get(0) > 3) // missionaries out of bounds
+				tempState.clear();
+			else if (tempState.get(1) < 0 || tempState.get(1) > 3) // cannibals out of bounds
+				tempState.clear();
+			else if (tempState.get(2) < 0 || tempState.get(2) > 1) // boat out of bounds
+				tempState.clear();
+			else {
+				if (action.get(2) == 1) {
+					for (int i = 0; i < 3; i++)
+						action.set(i, (-1)*action.get(i));
+				}
+				actions.add(action);
+			}
 		}
 		
 		return actions;
