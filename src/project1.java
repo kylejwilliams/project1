@@ -95,15 +95,20 @@ public class project1 {
 	 */
 	private static Node RecursiveDLS(Node node, Problem problem, int limit) {
 		if (problem.goalTest(node)) return node;
-		else if (limit == 0) {
-			ArrayList<Integer> error = new ArrayList<Integer>();
-			for (int i = 0; i < 3; i++)
-				error.add(-1);
-			Node errorNode = new Node(error);
-			return errorNode;
-		}
+		else if (limit == 0) return new Node(problem.cutoffError);
 		else {
-			return node;
+			boolean cutoffOccured = false;
+			
+			for (ArrayList<Integer> action : problem.validActions(node)) {
+				Node child = makeChildNode(problem, node, action);
+				Node result = RecursiveDLS(child, problem, limit - 1);
+				
+				if (result.state == problem.cutoffError) cutoffOccured = true;
+				else if (result.state != problem.cutoffError) return result;
+			}
+			
+			if (cutoffOccured) return new Node(problem.cutoffError);
+			else return new Node(problem.failureError);
 		}
 	}
 	
@@ -114,6 +119,23 @@ public class project1 {
 	public static Node makeNode(ArrayList<Integer> node) {
 		Node newNode = new Node(node);
 		return newNode;
+	}
+	
+	/**
+	 * @param problem 	the problem trying to be solved
+	 * @param node		the parent node that the child is derived from
+	 * @param action	the action to be performed on the parent node to get 
+	 * 					the child node
+	 * @return			A new node that is one level deeper within the decision
+	 * 					tree
+	 */
+	public static Node makeChildNode(Problem problem, Node node, 
+			ArrayList<Integer> action) {
+		/* TODO implement code to create a child node - a node that is derived
+		 * from a parent node, and an action. Must make sure the child node is
+		 * valid.
+		 */
+		return node;
 	}
 }
 
@@ -160,6 +182,17 @@ class Problem {
 		
 		for (int i = 0; i < 3; i++)
 			failureError.add(-2);
+	}
+	
+	public ArrayList<ArrayList<Integer>> validActions(Node node) {
+		ArrayList<ArrayList<Integer>> actions = 
+				new ArrayList<ArrayList<Integer>>();
+		
+		// for (int i = 0; i < actionList.size(); i++) {
+			// TODO generate an array list of actions that the node can take
+		// }
+		
+		return actions;
 	}
 	
 	/**
